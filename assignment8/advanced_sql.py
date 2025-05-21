@@ -53,17 +53,11 @@ def create_new_order():
             cursor = conn.cursor()
             print(f"Successfully connected to 'lesson.db'")
 
- 
-            # --- Start Transaction ---
-            conn.execute("BEGIN TRANSACTION")
-            print("Transaction started.")
-
-            # 1. Get customer_id
+             # 1. Get customer_id
             cursor.execute("""SELECT customer_id FROM customers WHERE customer_name = ?""", ('Perez and Sons',))
             customer_result = cursor.fetchone()
             if not customer_result:
                 print(f"Error: Customer 'Perez and Sons' not found.")
-                conn.rollback() # Rollback if customer not found
                 return
             customer_id = customer_result[0]
             print(f"Found customer_id: {customer_id} for 'Perez and Sons'")
@@ -73,7 +67,6 @@ def create_new_order():
             employee_result = cursor.fetchone()
             if not employee_result:
                     print(f"Error: Employee Miranda Harris not found.")
-                    conn.rollback() # Rollback if employee not found
                     return
             employee_id = employee_result[0]
             print(f"Found employee_id: {employee_id} for Miranda Harris")
@@ -84,13 +77,15 @@ def create_new_order():
             product_ids_results = cursor.fetchall()
             if not product_ids_results or len(product_ids_results) < 5:
                 print(f"Error: Could not retrieve 5 least expensive products.")
-                conn.rollback() # Rollback if products not found
                 return
             product_ids = [row[0] for row in product_ids_results]
             print(f"Found {len(product_ids)} least expensive product_ids: {product_ids}")
 
             # 4. Create the order record
             current_date = datetime.date.today().isoformat()
+                        # --- Start Transaction ---
+            conn.execute("BEGIN TRANSACTION")
+            print("Transaction started.")
             cursor.execute("""
                 INSERT INTO orders (customer_id, employee_id, date)
                 VALUES (?, ?, ?)
