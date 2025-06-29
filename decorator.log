@@ -1,0 +1,13 @@
+Function name: greet_world
+  Returned: None
+Function name: sum_all_numbers
+  Arguments: (1, 2, 3)
+  Returned: True
+Function name: sum_all_numbers
+  Arguments: (10, 20, 30, 40, 50)
+  Returned: True
+Function name: sum_all_numbers
+  Returned: True
+Function name: configure_settings
+  Keyword arguments: {'theme': 'dark', 'font_size': 12, 'enable_notifications': True}
+  Returned: <function logger_decorator at 0x000001B5396C9B20>
